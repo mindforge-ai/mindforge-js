@@ -1,11 +1,22 @@
-import WebSocket from "ws";
 import EventEmitter from "events";
+import {
+  MindforgeClientEvent,
+  MindforgeServerEvent,
+  MindforgeServerEventType,
+  PlayerAudioData,
+  PlayerMessage,
+  ServerError,
+} from "./messages";
 
-export enum MindforgeServerEvent {
-  AudioData = "audioData",
-  TextData = "textData",
-  Error = "error",
-  Close = "close",
+export function sendWebSocketMessage(
+  ws: WebSocket,
+  event: MindforgeClientEvent
+) {
+  const payload: { type: string; content?: string } = { type: event.type };
+  if ("content" in event && event.content) {
+    payload.content = event.content;
+  }
+  ws.send(JSON.stringify(payload));
 }
 
 export class MindforgeClient extends EventEmitter {
@@ -27,35 +38,45 @@ export class MindforgeClient extends EventEmitter {
     }`;
     this.ws = new WebSocket(url);
 
-    this.ws.on("open", () => {
+    this.ws.onopen = () => {
       console.log("Connected to Mindforge server");
-    });
+    };
 
-    this.ws.on("message", (data: WebSocket.Data) => {
+    this.ws.onmessage = (event: MessageEvent) => {
       try {
-        const parsedData = JSON.parse(data.toString());
-        if (parsedData.type === "audio") {
-          this.emit(MindforgeServerEvent.AudioData, parsedData.data);
-        } else if (parsedData.type === "text") {
-          this.emit(MindforgeServerEvent.TextData, parsedData.data);
-        }
+        const serverEvent: MindforgeServerEvent = JSON.parse(event.data);
+        this.emit(serverEvent.type, serverEvent.content);
       } catch (error) {
-        this.emit(MindforgeServerEvent.Error, "Failed to parse server message");
+        this.emit(
+          MindforgeServerEventType.ServerError,
+          "Failed to parse server event"
+        );
       }
-    });
+    };
 
-    this.ws.on("error", (error) => {
-      this.emit(MindforgeServerEvent.Error, error);
-    });
+    this.ws.onerror = (event: Event) => {
+      this.emit(
+        MindforgeServerEventType.ServerError,
+        "WebSocket error occurred"
+      );
+    };
 
-    this.ws.on("close", () => {
-      this.emit(MindforgeServerEvent.Close);
-    });
+    this.ws.onclose = () => {
+      this.emit(MindforgeServerEventType.Close);
+    };
   }
 
   public sendMessage(message: string): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      this.ws.send(JSON.stringify({ type: "userMessage", content: message }));
+      sendWebSocketMessage(this.ws, new PlayerMessage(message));
+    } else {
+      throw new Error("WebSocket is not connected");
+    }
+  }
+
+  public sendAudioData(audioData: string): void {
+    if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+      sendWebSocketMessage(this.ws, new PlayerAudioData(audioData));
     } else {
       throw new Error("WebSocket is not connected");
     }
