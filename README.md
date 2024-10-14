@@ -5,7 +5,20 @@ This is a TypeScript client for interacting with the Mindforge API. It provides 
 ## Installation
 
 To install the Mindforge client, use your preferred package manager:
-bash# NPMnpm install mindforge# Yarnyarn add mindforge# PNPMpnpm add mindforge# Bunbun add mindforge
+
+```bash
+# NPM
+npm install mindforge
+
+# Yarn
+yarn add mindforge
+
+# PNPM
+pnpm add mindforge
+
+# Bun
+bun add mindforge
+```
 
 ## Usage
 
@@ -51,27 +64,35 @@ You can listen for various events emitted by the client:
 client.on(MindforgeServerEventType.NPCMessage, (content) => {
   console.log("Received NPC message:", content);
 });
+
 client.on(MindforgeServerEventType.NPCAction, (content) => {
   console.log("Received NPC action:", content);
 });
+
 client.on(MindforgeServerEventType.NPCLiveMessageChunk, (content) => {
   console.log("Received NPC live message chunk:", content);
 });
+
 client.on(MindforgeServerEventType.NPCLiveMessage, (content) => {
   console.log("Received complete NPC live message:", content);
 });
+
 client.on(MindforgeServerEventType.NPCAudioData, (content) => {
   console.log("Received NPC audio data:", content);
 });
+
 client.on(MindforgeServerEventType.PlayerTranscribedMessageChunk, (content) => {
   console.log("Received player transcribed message chunk:", content);
 });
+
 client.on(MindforgeServerEventType.PlayerTranscribedMessage, (content) => {
   console.log("Received complete player transcribed message:", content);
 });
+
 client.on(MindforgeServerEventType.ServerError, (content) => {
   console.error("Server error:", content);
 });
+
 client.on(MindforgeServerEventType.Close, () => {
   console.log("Connection closed");
 });
@@ -92,18 +113,27 @@ The client uses the following event types:
 ### Server Event Types
 
 `NPCMessage`: Received when the NPC sends a complete message.
+
 `NPCAction`: Received when the NPC performs an action.
+
 `NPCLiveMessageChunk`: Received when a chunk of the NPC's live message is available.
+
 `NPCLiveMessage`: Received when the NPC's complete live message is available.
+
 `NPCAudioData`: Received when audio data from the NPC is available.
+
 `PlayerTranscribedMessageChunk`: Received when a chunk of the player's transcribed message is available.
+
 `PlayerTranscribedMessage`: Received when the player's complete transcribed message is available.
+
 `ServerError`: Received when an error occurs on the server.
+
 `Close`: Received when the WebSocket connection is closed.
 
 ### Client Event Types
 
 `PlayerMessage`: Used to send a text message from the player to the server.
+
 `PlayerAudioData`: Used to send audio data from the player to the server.
 
 ## Support
