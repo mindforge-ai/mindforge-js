@@ -1,90 +1,105 @@
-export enum MindforgeServerEventType {
-  NPCMessage = "server.npc.message",
-  NPCAction = "server.npc.action",
-  NPCLiveMessageChunk = "server.npc.live.message_chunk",
-  NPCLiveMessage = "server.npc.live.message",
-  NPCAudioData = "server.npc.audio_data",
-  PlayerTranscribedMessageChunk = "server.player.transcribed_message_chunk",
-  PlayerTranscribedMessage = "server.player.transcribed_message",
-  ServerError = "server.error",
-  Close = "close",
-}
-
-export enum MindforgeClientEventType {
-  PlayerMessage = "client.player.message",
-  PlayerAudioData = "client.player.audio_data",
-}
-
-export type MindforgeServerEvent = {
-  type: MindforgeServerEventType;
-  content?: string;
+export type MindforgeNPCMessageEventMap = {
+  [MindforgeNPCMessageType.Text]: NPCText;
+  [MindforgeNPCMessageType.InputAudioTranscript]: NPCInputAudioTranscript;
+  [MindforgeNPCMessageType.OutputAudioTranscript]: NPCOutputAudioTranscript;
+  // [MindforgeNPCMessageType.ServerFunctionFire]: NPCServerFunctionFire;
+  // [MindforgeNPCMessageType.ServerFunctionCall]: NPCServerFunctionCall;
+  [MindforgeNPCMessageType.ClientFunctionFire]: NPCClientFunctionFire;
+  // [MindforgeNPCMessageType.ClientFunctionCall]: NPCClientFunctionCall;
 };
 
-export type MindforgeClientEvent = {
-  type: MindforgeClientEventType;
-  content?: string;
+export enum MindforgeNPCMessageType {
+  Text = "npc.text",
+  InputAudioTranscript = "npc.input_audio_transcript",
+  OutputAudioTranscript = "npc.output_audio_transcript",
+  // ServerFunctionFire = "npc.server_function_fire",
+  // ServerFunctionCall = "npc.server_function_call",
+  ClientFunctionFire = "npc.client_function_fire",
+  // ClientFunctionCall = "npc.client_function_call",
+}
+
+export enum MindforgeClientMessageType {
+  ClientFunctionResult = "client.function_result",
+}
+
+export enum MindforgeServerMessageType {
+  ServerFunctionResult = "server.function_result",
+}
+
+export enum MindforgePlayerMessageType {
+  Text = "player.text",
+  TriggerNPCMessage = "player.trigger_npc_message",
+}
+
+type NPCFunctionMessage = {
+  type: MindforgeNPCMessageType.ClientFunctionFire; // Other types still in development.
+  name: string;
+  args: any[];
 };
 
-export class NPCMessage implements MindforgeServerEvent {
-  type: MindforgeServerEventType.NPCMessage =
-    MindforgeServerEventType.NPCMessage;
+type NPCContentMessgae = {
+  type:
+    | MindforgeNPCMessageType.Text
+    | MindforgeNPCMessageType.InputAudioTranscript
+    | MindforgeNPCMessageType.OutputAudioTranscript;
+  content: string;
+};
+
+export type NPCMessage = NPCFunctionMessage | NPCContentMessgae;
+
+export class NPCText implements NPCContentMessgae {
+  type: MindforgeNPCMessageType.Text = MindforgeNPCMessageType.Text;
   constructor(public content: string) {}
 }
 
-export class NPCAction implements MindforgeServerEvent {
-  type: MindforgeServerEventType.NPCAction = MindforgeServerEventType.NPCAction;
+export class NPCInputAudioTranscript implements NPCContentMessgae {
+  type: MindforgeNPCMessageType.InputAudioTranscript =
+    MindforgeNPCMessageType.InputAudioTranscript;
   constructor(public content: string) {}
 }
 
-export class NPCLiveMessageChunk implements MindforgeServerEvent {
-  type: MindforgeServerEventType.NPCLiveMessageChunk =
-    MindforgeServerEventType.NPCLiveMessageChunk;
+export class NPCOutputAudioTranscript implements NPCContentMessgae {
+  type: MindforgeNPCMessageType.OutputAudioTranscript =
+    MindforgeNPCMessageType.OutputAudioTranscript;
   constructor(public content: string) {}
 }
 
-export class NPCLiveMessage implements MindforgeServerEvent {
-  type: MindforgeServerEventType.NPCLiveMessage =
-    MindforgeServerEventType.NPCLiveMessage;
+/* export class NPCServerFunctionFire implements NPCFunctionMessage {
+  type: MindforgeNPCMessageType.ServerFunctionFire =
+    MindforgeNPCMessageType.ServerFunctionFire;
+  constructor(public name: string, public args: any[]) {}
+}
+
+export class NPCServerFunctionCall implements NPCFunctionMessage {
+  type: MindforgeNPCMessageType.ServerFunctionCall =
+    MindforgeNPCMessageType.ServerFunctionCall;
+  constructor(public name: string, public args: any[]) {}
+} */
+
+export class NPCClientFunctionFire implements NPCFunctionMessage {
+  type: MindforgeNPCMessageType.ClientFunctionFire =
+    MindforgeNPCMessageType.ClientFunctionFire;
+  constructor(public name: string, public args: any[]) {}
+}
+
+/* export class NPCClientFunctionCall implements NPCFunctionMessage {
+  type: MindforgeNPCMessageType.ClientFunctionCall =
+    MindforgeNPCMessageType.ClientFunctionCall;
+  constructor(public name: string, public args: any[]) {}
+} */
+
+export type PlayerMessage = {
+  type: MindforgePlayerMessageType;
+  content: string;
+};
+
+export class PlayerText implements PlayerMessage {
+  type: MindforgePlayerMessageType.Text = MindforgePlayerMessageType.Text;
   constructor(public content: string) {}
 }
 
-export class NPCAudioData implements MindforgeServerEvent {
-  type: MindforgeServerEventType.NPCAudioData =
-    MindforgeServerEventType.NPCAudioData;
+export class PlayerTriggerNPCMessage implements PlayerMessage {
+  type: MindforgePlayerMessageType.TriggerNPCMessage =
+    MindforgePlayerMessageType.TriggerNPCMessage;
   constructor(public content: string) {}
-}
-
-export class PlayerTranscribedMessageChunk implements MindforgeServerEvent {
-  type: MindforgeServerEventType.PlayerTranscribedMessageChunk =
-    MindforgeServerEventType.PlayerTranscribedMessageChunk;
-  constructor(public content: string) {}
-}
-
-export class PlayerTranscribedMessage implements MindforgeServerEvent {
-  type: MindforgeServerEventType.PlayerTranscribedMessage =
-    MindforgeServerEventType.PlayerTranscribedMessage;
-  constructor(public content: string) {}
-}
-
-export class PlayerMessage implements MindforgeClientEvent {
-  type: MindforgeClientEventType.PlayerMessage =
-    MindforgeClientEventType.PlayerMessage;
-  constructor(public content: string) {}
-}
-
-export class PlayerAudioData implements MindforgeClientEvent {
-  type: MindforgeClientEventType.PlayerAudioData =
-    MindforgeClientEventType.PlayerAudioData;
-  constructor(public content: string) {}
-}
-
-export class ServerError implements MindforgeServerEvent {
-  type: MindforgeServerEventType.ServerError =
-    MindforgeServerEventType.ServerError;
-  constructor(public content: string) {}
-}
-
-export class Close implements MindforgeServerEvent {
-  type: MindforgeServerEventType.Close = MindforgeServerEventType.Close;
-  constructor() {}
 }
