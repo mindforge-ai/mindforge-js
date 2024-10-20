@@ -1,6 +1,7 @@
 {
   "name": "mindforge",
-  "version": "1.0.13",
+  "type": "module",
+  "version": "1.0.14",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
