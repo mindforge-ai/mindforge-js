@@ -1,12 +1,9 @@
 {
   "name": "mindforge",
   "type": "module",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build"
@@ -23,17 +20,5 @@
     "@livekit/components-react": "^2.6.5",
     "livekit-client": "^2.5.9",
     "ws": "^8.18.0"
-  },
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./messages": {
-      "import": "./dist/messages.js",
-      "require": "./dist/messages.js",
-      "types": "./dist/messages.d.ts"
-    }
   }
 }

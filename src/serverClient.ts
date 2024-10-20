@@ -4,7 +4,7 @@ import {
   MindforgeNPCMessageType,
   NPCClientFunctionFire,
   NPCText,
-} from "./messages";
+} from "./messages.js";
 
 export class MindforgeServerClient extends EventEmitter {
   private baseURL: string;
