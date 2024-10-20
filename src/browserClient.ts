@@ -9,7 +9,7 @@ import {
   NPCOutputAudioTranscript,
   NPCText,
   PlayerText,
-} from "./messages.js";
+} from "./messages";
 
 export class MindforgeBrowserClient extends EventEmitter {
   public room: Room | null = null;

@@ -1,10 +1,10 @@
-export * from "./messages.js";
+export * from "./messages";
 
-import { MindforgeServerClient } from "./serverClient.js";
+import { MindforgeServerClient } from "./serverClient";
 export { MindforgeServerClient };
 
-import { MindforgeBrowserClient } from "./browserClient.js";
+import { MindforgeBrowserClient } from "./browserClient";
 export { MindforgeBrowserClient };
 
-import { getMindforgeSessionToken } from "./token.js";
+import { getMindforgeSessionToken } from "./token";
 export { getMindforgeSessionToken };
