@@ -1,6 +1,6 @@
 {
   "name": "mindforge",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -24,7 +24,15 @@
     "ws": "^8.18.0"
   },
   "exports": {
-    ".": "./dist/index.js",
-    "./messages": "./dist/messages.js"
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./messages": {
+      "import": "./dist/messages.js",
+      "require": "./dist/messages.js",
+      "types": "./dist/messages.d.ts"
+    }
   }
 }
