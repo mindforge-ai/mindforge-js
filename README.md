@@ -39,9 +39,9 @@ To use this client, you'll need a Mindforge API key. You can create keys in the 
 To connect to the Mindforge server:
 
 ```typescript
-const characterId = "your-character-id";
+const npcId = "your-npc-id";
 const conversationId = "optional-conversation-id";
-client.connect(characterId, conversationId);
+client.connect(npcId, conversationId);
 ```
 
 ### Sending messages and audio data

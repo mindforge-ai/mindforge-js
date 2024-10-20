@@ -1,5 +1,5 @@
 export async function getMindforgeSessionToken(
-  characterIds: string[],
+  npcIds: string[],
   {
     baseUrl = "https://api.mindforge.ai",
     apiKey,
@@ -26,7 +26,7 @@ export async function getMindforgeSessionToken(
       "Content-Type": "application/json",
       Authorization: `Bearer ${mindforgeApiKey}`,
     },
-    body: JSON.stringify({ characterIds, conversationId, userId }),
+    body: JSON.stringify({ npcIds, conversationId, userId }),
   });
 
   if (!response.ok) {

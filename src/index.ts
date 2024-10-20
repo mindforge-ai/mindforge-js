@@ -163,14 +163,14 @@ export class MindforgeClient extends EventEmitter {
 
   public perform = {
     trigger: async (
-      characterId: string,
+      npcId: string,
       history: Array<{ role: "user" | "assistant"; content: string }>
     ) => {
       try {
         const response = await fetch(`${this.baseURL}/perform`, {
           method: "POST",
           body: JSON.stringify({
-            characterId,
+            npcId,
             history,
           }),
           headers: {
@@ -193,7 +193,7 @@ export class MindforgeClient extends EventEmitter {
         });
       } catch (error) {
         console.error("Error calling perform API:", error);
-        throw new Error("Failed to perform character interaction");
+        throw new Error("Failed to perform NPC interaction");
       }
     },
   };
