@@ -34,7 +34,7 @@ export enum MindforgePlayerMessageType {
 type NPCFunctionMessage = {
   type: MindforgeNPCMessageType.ClientFunctionFire; // Other types still in development.
   name: string;
-  args: any[];
+  args: object;
 };
 
 type NPCContentMessgae = {
@@ -79,7 +79,7 @@ export class NPCServerFunctionCall implements NPCFunctionMessage {
 export class NPCClientFunctionFire implements NPCFunctionMessage {
   type: MindforgeNPCMessageType.ClientFunctionFire =
     MindforgeNPCMessageType.ClientFunctionFire;
-  constructor(public name: string, public args: any[]) {}
+  constructor(public name: string, public args: object) {}
 }
 
 /* export class NPCClientFunctionCall implements NPCFunctionMessage {

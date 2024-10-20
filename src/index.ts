@@ -15,9 +15,22 @@ export { getMindforgeSessionToken };
 
 export class MindforgeClient extends EventEmitter {
   public room: Room | null = null;
+  private baseURL: string;
+  private apiKey: string | null;
 
-  constructor() {
+  constructor({
+    baseURL = "https://api.mindforge.ai",
+    apiKey = process.env.MINDFORGE_API_KEY || null,
+  }: {
+    baseURL?: string;
+    apiKey?: string | null;
+  } = {}) {
     super();
+    this.baseURL = baseURL;
+    this.apiKey = apiKey;
+    if (!apiKey) {
+      throw new Error("[Mindforge] API key missing");
+    }
   }
 
   public on<K extends MindforgeNPCMessageType>(
@@ -147,4 +160,41 @@ export class MindforgeClient extends EventEmitter {
       this.room.disconnect();
     }
   }
+
+  public perform = {
+    trigger: async (
+      characterId: string,
+      history: Array<{ role: "user" | "assistant"; content: string }>
+    ) => {
+      try {
+        const response = await fetch(`${this.baseURL}/perform`, {
+          method: "POST",
+          body: JSON.stringify({
+            characterId,
+            history,
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${this.apiKey}`,
+          },
+        });
+
+        const result: NPCMessage[] = await response.json();
+
+        return result.map((message) => {
+          switch (message.type) {
+            case MindforgeNPCMessageType.Text:
+              return new NPCText(message.content);
+            case MindforgeNPCMessageType.ClientFunctionFire:
+              return new NPCClientFunctionFire(message.name, message.args);
+            default:
+              throw new Error("Unknown message type");
+          }
+        });
+      } catch (error) {
+        console.error("Error calling perform API:", error);
+        throw new Error("Failed to perform character interaction");
+      }
+    },
+  };
 }
