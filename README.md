@@ -22,7 +22,7 @@ pnpm add mindforge
 bun add mindforge
 ```
 
-### Server-side Usage
+## Server-side Usage
 
 Create a `MindforgeServerClient`:
 
@@ -37,7 +37,7 @@ const client = new MindforgeServerClient({
 
 To use this client, you'll need a Mindforge API key. You can create keys in the dashboard.
 
-#### Performing NPC interactions
+### Performing NPC interactions
 
 To trigger an NPC interaction:
 
@@ -65,7 +65,7 @@ try {
 }
 ```
 
-### Browser-side Usage
+## Browser-side Usage
 
 Create a `MindforgeBrowserClient`:
 
@@ -75,7 +75,7 @@ import { MindforgeBrowserClient, MindforgeNPCMessageType } from "mindforge";
 const client = new MindforgeBrowserClient();
 ```
 
-#### Joining a session
+### Joining a session
 
 To join a live session:
 
@@ -90,7 +90,7 @@ try {
 }
 ```
 
-#### Receiving messages
+### Receiving messages
 
 You can listen for various events emitted by the client:
 
@@ -112,7 +112,7 @@ client.on(MindforgeNPCMessageType.ClientFunctionFire, (message) => {
 });
 ```
 
-#### Disconnecting
+### Disconnecting
 
 To disconnect from the session:
 
