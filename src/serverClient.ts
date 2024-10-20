@@ -28,7 +28,7 @@ export class MindforgeServerClient extends EventEmitter {
   public perform = {
     trigger: async (
       npcId: string,
-      history: Array<{ role: "user" | "assistant"; content: string }>
+      history: Array<{ role: "player" | "npc"; content: string }>
     ) => {
       try {
         const response = await fetch(`${this.baseURL}/perform`, {
