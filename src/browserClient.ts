@@ -32,12 +32,16 @@ export class MindforgeBrowserClient extends EventEmitter {
     return super.emit(event, data);
   }
 
-  public async joinSession(token: string): Promise<void> {
+  public async joinSession(
+    token: string,
+    websocketUrl?: string
+  ): Promise<void> {
     if (!token) {
       throw new Error("Token is required");
     }
     this.room = new Room();
-    await this.room.connect("wss://mindforgeai-d4ssqx5a.livekit.cloud", token);
+    const url = websocketUrl || "wss://mindforgeai-d4ssqx5a.livekit.cloud";
+    await this.room.connect(url, token);
     console.log("Connected to room", this.room.name);
 
     await this.room.localParticipant.setMicrophoneEnabled(true);
