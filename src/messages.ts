@@ -1,6 +1,8 @@
 export type MindforgeNPCMessageEventMap = {
   [MindforgeNPCMessageType.Text]: NPCText;
+  [MindforgeNPCMessageType.InputAudioTranscriptChunk]: NPCInputAudioTranscriptChunk;
   [MindforgeNPCMessageType.InputAudioTranscript]: NPCInputAudioTranscript;
+  [MindforgeNPCMessageType.OutputAudioTranscriptChunk]: NPCOutputAudioTranscriptChunk;
   [MindforgeNPCMessageType.OutputAudioTranscript]: NPCOutputAudioTranscript;
   // [MindforgeNPCMessageType.ServerFunctionFire]: NPCServerFunctionFire;
   // [MindforgeNPCMessageType.ServerFunctionCall]: NPCServerFunctionCall;
@@ -10,7 +12,9 @@ export type MindforgeNPCMessageEventMap = {
 
 export enum MindforgeNPCMessageType {
   Text = "npc.text",
+  InputAudioTranscriptChunk = "npc.input_audio_transcript.chunk",
   InputAudioTranscript = "npc.input_audio_transcript",
+  OutputAudioTranscriptChunk = "npc.output_audio_transcript.chunk",
   OutputAudioTranscript = "npc.output_audio_transcript",
   // ServerFunctionFire = "npc.server_function_fire",
   // ServerFunctionCall = "npc.server_function_call",
@@ -37,31 +41,53 @@ type NPCFunctionMessage = {
   args: object;
 };
 
-type NPCContentMessgae = {
-  type:
-    | MindforgeNPCMessageType.Text
-    | MindforgeNPCMessageType.InputAudioTranscript
-    | MindforgeNPCMessageType.OutputAudioTranscript;
+type NPCContentMessage = {
+  type: MindforgeNPCMessageType.Text;
   content: string;
 };
 
-export type NPCMessage = NPCFunctionMessage | NPCContentMessgae;
+type NPCTranscriptMessage = {
+  type:
+    | MindforgeNPCMessageType.InputAudioTranscriptChunk
+    | MindforgeNPCMessageType.InputAudioTranscript
+    | MindforgeNPCMessageType.OutputAudioTranscriptChunk
+    | MindforgeNPCMessageType.OutputAudioTranscript;
+  transcriptId: string;
+  content: string;
+};
 
-export class NPCText implements NPCContentMessgae {
+export type NPCMessage =
+  | NPCFunctionMessage
+  | NPCContentMessage
+  | NPCTranscriptMessage;
+
+export class NPCText implements NPCContentMessage {
   type: MindforgeNPCMessageType.Text = MindforgeNPCMessageType.Text;
   constructor(public content: string) {}
 }
 
-export class NPCInputAudioTranscript implements NPCContentMessgae {
-  type: MindforgeNPCMessageType.InputAudioTranscript =
-    MindforgeNPCMessageType.InputAudioTranscript;
-  constructor(public content: string) {}
+export class NPCInputAudioTranscriptChunk implements NPCTranscriptMessage {
+  type: MindforgeNPCMessageType.InputAudioTranscriptChunk =
+    MindforgeNPCMessageType.InputAudioTranscriptChunk;
+  constructor(public transcriptId: string, public content: string) {}
 }
 
-export class NPCOutputAudioTranscript implements NPCContentMessgae {
+export class NPCInputAudioTranscript implements NPCTranscriptMessage {
+  type: MindforgeNPCMessageType.InputAudioTranscript =
+    MindforgeNPCMessageType.InputAudioTranscript;
+  constructor(public transcriptId: string, public content: string) {}
+}
+
+export class NPCOutputAudioTranscriptChunk implements NPCTranscriptMessage {
+  type: MindforgeNPCMessageType.OutputAudioTranscriptChunk =
+    MindforgeNPCMessageType.OutputAudioTranscriptChunk;
+  constructor(public transcriptId: string, public content: string) {}
+}
+
+export class NPCOutputAudioTranscript implements NPCTranscriptMessage {
   type: MindforgeNPCMessageType.OutputAudioTranscript =
     MindforgeNPCMessageType.OutputAudioTranscript;
-  constructor(public content: string) {}
+  constructor(public transcriptId: string, public content: string) {}
 }
 
 /* export class NPCServerFunctionFire implements NPCFunctionMessage {

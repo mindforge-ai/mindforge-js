@@ -9,6 +9,8 @@ import {
   NPCOutputAudioTranscript,
   NPCText,
   PlayerText,
+  NPCInputAudioTranscriptChunk,
+  NPCOutputAudioTranscriptChunk,
 } from "./messages";
 
 export class MindforgeBrowserClient extends EventEmitter {
@@ -75,16 +77,34 @@ export class MindforgeBrowserClient extends EventEmitter {
                 new NPCText(data.content)
               );
               break;
+            case MindforgeNPCMessageType.InputAudioTranscriptChunk:
+              this.emit(
+                MindforgeNPCMessageType.InputAudioTranscriptChunk,
+                new NPCInputAudioTranscriptChunk(
+                  data.transcriptId,
+                  data.content
+                )
+              );
+              break;
             case MindforgeNPCMessageType.InputAudioTranscript:
               this.emit(
                 MindforgeNPCMessageType.InputAudioTranscript,
-                new NPCInputAudioTranscript(data.content)
+                new NPCInputAudioTranscript(data.transcriptId, data.content)
+              );
+              break;
+            case MindforgeNPCMessageType.OutputAudioTranscriptChunk:
+              this.emit(
+                MindforgeNPCMessageType.OutputAudioTranscriptChunk,
+                new NPCOutputAudioTranscriptChunk(
+                  data.transcriptId,
+                  data.content
+                )
               );
               break;
             case MindforgeNPCMessageType.OutputAudioTranscript:
               this.emit(
                 MindforgeNPCMessageType.OutputAudioTranscript,
-                new NPCOutputAudioTranscript(data.content)
+                new NPCOutputAudioTranscript(data.transcriptId, data.content)
               );
               break;
             case MindforgeNPCMessageType.ClientFunctionFire:
