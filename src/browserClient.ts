@@ -11,7 +11,7 @@ import {
   PlayerText,
   NPCInputAudioTranscriptChunk,
   NPCOutputAudioTranscriptChunk,
-} from "./messages";
+} from "./messages.js";
 
 export class MindforgeBrowserClient extends EventEmitter {
   public room: Room | null = null;
