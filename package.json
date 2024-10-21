@@ -1,6 +1,6 @@
 {
   "name": "mindforge",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -16,7 +16,7 @@
   },
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc"
+    "build": "tsc --declaration"
   },
   "author": "",
   "license": "ISC",
